@@ -13,9 +13,7 @@ const name = packageOptions.filename || path.basename(packageDir)
 // ensure TS checks only once for each build
 let hasTSChecked = false
 
-const s = {
-  warning: dye('YELLOW'),
-}
+const warning = dye('yellow').attachConsole()
 
 const outputConfigs = {
   'esm-bundler': {
@@ -74,7 +72,7 @@ export default packageConfigs
 
 function createConfig(format, output, plugins = []) {
   if (!output) {
-    console.log(s.warning(`invalid format: "${format}"`))
+    warning(`invalid format: "${format}"`)
     process.exit(1)
   }
 

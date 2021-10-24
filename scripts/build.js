@@ -22,11 +22,10 @@ async function run() {
   checkSize()
 }
 
-const s = {
-  yellow: dye('YELLOW', 'BOLD'),
-  green: dye('GREEN', 'BOLD'),
-  gray: dye('GREEN', 'BOLD'),
-}
+const error = dye('red', 'bold').attachConsole('error')
+const yellow = dye('yellow', 'bold').attachConsole()
+const green = dye('green', 'bold').attachConsole()
+const gray = dye('green', 'bold')
 
 async function build() {
   const pkgDir = path.resolve(`./`)
@@ -66,9 +65,7 @@ async function build() {
 
   if (buildTypes && pkg.types) {
     console.log()
-    console.log(
-      s.yellow(`Rolling up type definitions for ${ target }...`)
-    )
+    yellow(`Rolling up type definitions for ${ target }...`)
 
     // build types
     const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor')
@@ -95,11 +92,9 @@ async function build() {
         )
         await fs.writeFile(dtsPath, existing + '\n' + toAdd.join('\n'))
       }
-      console.log(
-        s.green(`API Extractor completed successfully.`)
-      )
+      green(`API Extractor completed successfully.`)
     } else {
-      console.error(
+      error(
         `API Extractor completed with ${extractorResult.errorCount} errors` +
           ` and ${extractorResult.warningCount} warnings`
       )
@@ -129,7 +124,7 @@ function checkFileSize(filePath) {
   const compressed = compress(file)
   const compressedSize = (compressed.length / 1024).toFixed(2) + 'kb'
   console.log(
-    `${s.gray(path.basename(filePath)
+    `${gray(path.basename(filePath)
     )} min:${minSize} / gzip:${gzippedSize} / brotli:${compressedSize}`
   )
 }

@@ -9,9 +9,9 @@ const msg = require('fs')
 const commitRE = /^(revert: )?(feat|fix|docs|dx|style|refactor|perf|test|workflow|build|ci|chore|types|wip|release)(\(.+\))?: .{1,50}/
 
 const s = {
-  error: dye('WHITE', 'BG_RED', 'BOLD'),
-  errorText: dye('RED'),
-  green: dye('GREEN'),
+  error: dye('white', 'bg-red', 'bold'),
+  errorText: dye('red'),
+  green: dye('green'),
 }
 
 if (!commitRE.test(msg)) {

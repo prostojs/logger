@@ -9,13 +9,10 @@ const run = (bin, args, opts = {}) =>
   execa(bin, args, { stdio: 'inherit', ...opts })
 const bin = name => path.resolve(__dirname, '../node_modules/.bin/' + name)  
 
-const s = {
-    step: dye('CYAN'),
-    error: dye('RED_BRIGHT'),
-    good: dye('GREEN', 'BOLD'),
-}
-
-const step = msg => console.log(s.step(msg))
+const step = dye('cyan').attachConsole()
+const error = dye('red-bright').attachConsole('error')
+const good = dye('green', 'bold').prefix('✓').attachConsole()
+const info = dye('green', 'dim').attachConsole('info')
 
 const branch = execa.sync('git', ['branch', '--show-current']).stdout
 const inc = i => {
@@ -35,7 +32,7 @@ const commitMessage = execa.sync('git', ['log', '-1', '--pretty=%B']).stdout
 
 const gitStatus = execa.sync('git', ['status']).stdout
 if (gitStatus.indexOf('nothing to commit, working tree clean') < 0) {
-    console.error(s.error('Please commit all the changes first.'))
+    error('Please commit all the changes first.')
     process.exit(1)
 }
 
@@ -87,7 +84,7 @@ async function main() {
             await run(bin('jest'), ['--clearCache'])
             await run('npm', ['test', '--', '--bail'])
         } else {
-            console.log(`(skipped)`)
+            info(`(skipped)`)
         }
 
         // build all packages with types
@@ -95,7 +92,7 @@ async function main() {
         if (!skipBuild && !isDryRun) {
             await run('npm', ['run', 'build', '--', '--release'])
         } else {
-            console.log(`(skipped)`)
+            info(`(skipped)`)
         }
 
         const npmAction = release.split(' ')[0]
@@ -113,7 +110,7 @@ async function main() {
         // updateChangeLog(targetVersion)
 
     } else {
-        console.error('Branch "main" expected')
+        error('Branch "main" expected')
     }
 
     step('\nPushing changes ...')
@@ -125,6 +122,6 @@ async function main() {
     step('\nPublishing ...')
     execa.sync('npm', ['publish', '--access', 'public'])
     
-    console.log(s.good('✓ All done!'))
+    good('All done!')
 }
 
