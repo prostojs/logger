@@ -1,4 +1,4 @@
-import { ProstoLogger } from "."
+import { ProstoLogger } from '.'
 
 const c = {
     log: jest.fn(),

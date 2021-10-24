@@ -9,9 +9,9 @@ const run = (bin, args, opts = {}) =>
   execa(bin, args, { stdio: 'inherit', ...opts })
 const bin = name => path.resolve(__dirname, '../node_modules/.bin/' + name)  
 
-const step = dye('cyan').attachConsole()
+const step = dye('cyan').prefix('\n').attachConsole()
 const error = dye('red-bright').attachConsole('error')
-const good = dye('green', 'bold').prefix('✓').attachConsole()
+const good = dye('green', 'bold').prefix('\n✓').attachConsole()
 const info = dye('green', 'dim').attachConsole('info')
 
 const branch = execa.sync('git', ['branch', '--show-current']).stdout
@@ -79,7 +79,7 @@ async function main() {
         }
 
         // run tests before release
-        step('\nRunning tests...')
+        step('Running tests...')
         if (!skipTests && !isDryRun) {
             await run(bin('jest'), ['--clearCache'])
             await run('npm', ['test', '--', '--bail'])
@@ -87,8 +87,15 @@ async function main() {
             info(`(skipped)`)
         }
 
+        step('Running lint...')
+        if (!skipTests && !isDryRun) {
+            await run('npm', ['run', 'lint'])
+        } else {
+            info(`(skipped)`)
+        }
+
         // build all packages with types
-        step('\nBuilding package...')
+        step('Building package...')
         if (!skipBuild && !isDryRun) {
             await run('npm', ['run', 'build', '--', '--release'])
         } else {
@@ -103,23 +110,20 @@ async function main() {
                 'premajor',
             ].includes(npmAction) ? ['--preid', pre] : []
 
-        step('\nCreating a new version ' + targetVersion + ' ...')
+        step('Creating a new version ' + targetVersion + ' ...')
         execa.sync('npm', ['version', npmAction, ...preAction, '-m', commitMessage])
-
-        // included in "version" script
-        // updateChangeLog(targetVersion)
 
     } else {
         error('Branch "main" expected')
     }
 
-    step('\nPushing changes ...')
+    step('Pushing changes ...')
     execa.sync('git', ['push'])
 
-    step('\nPushing tags ...')
+    step('Pushing tags ...')
     execa.sync('git', ['push', '--tags'])
 
-    step('\nPublishing ...')
+    step('Publishing ...')
     execa.sync('npm', ['publish', '--access', 'public'])
     
     good('All done!')

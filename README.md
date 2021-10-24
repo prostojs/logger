@@ -3,7 +3,6 @@
 <a  href="https://github.com/prostojs/logger/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" />
 </a>
-    <img src="https://img.shields.io/badge/Dependencies-0-yellow?style=for-the-badge" />
 </p>
 
 Plain simple logger with banner and colors based on `@prostojs/dye`
