@@ -4,8 +4,8 @@
   "description": "Plain simple logger with banner and colors",
   "main": "index.js",
   "module": "dist/logger.esm-bundler.js",
-  "unpkg": "dist/logger.global.js",
-  "jsdelivr": "dist/logger.global.js",
+  "unpkg": "dist/logger.global.prod.js",
+  "jsdelivr": "dist/logger.global.prod.js",
   "types": "dist/logger.d.ts",
   "files": [
     "index.js",
@@ -38,7 +38,7 @@
     ]
   },
   "dependencies": {
-    "@prostojs/dye": "^0.1.0"
+    "@prostojs/dye": "^0.2.0"
   },
   "gitHooks": {
     "commit-msg": "node scripts/verifyCommit.js"

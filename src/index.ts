@@ -34,11 +34,11 @@ const defaultStyles: TProstoLoggerStyles = {
 }
 
 const defaultTypeBanners: TProstoLoggerTypeBanners = {
-    debug:  '[ DEBUG ]',
-    info:   '[ INFO  ]',
-    log:    '[  LOG  ]',
-    warn:   dye('bg-yellow', 'red')('[WARNING]'),
-    error:  dye('bg-red', 'white')('[ ERROR ]'),
+    debug:  '[ DEBUG ] ',
+    info:   '[ INFO  ] ',
+    log:    '[  LOG  ] ',
+    warn:   dye('bg-yellow', 'red')('[WARNING]') + ' ',
+    error:  dye('bg-red', 'white')('[ ERROR ]') + ' ',
 }
 
 export class ProstoLogger implements TConsoleInterface {
