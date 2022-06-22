@@ -22,7 +22,8 @@ export interface TPorstoLoggerOptions {
     logLevel: EProstoLogLevel,
     console: TConsoleInterface,
     styles: Partial<TProstoLoggerStyles>,
-    typeBanners: Partial<TProstoLoggerTypeBanners>
+    typeBanners: Partial<TProstoLoggerTypeBanners>,
+    timestamp: boolean | 'ISO' | 'Locale' | 'Time' | 'Date',
 }
 
 const defaultStyles: TProstoLoggerStyles = {
@@ -34,11 +35,20 @@ const defaultStyles: TProstoLoggerStyles = {
 }
 
 const defaultTypeBanners: TProstoLoggerTypeBanners = {
-    debug:  '[ DEBUG ] ',
-    info:   '[ INFO  ] ',
-    log:    '[  LOG  ] ',
-    warn:   dye('bg-yellow', 'red')('[WARNING]') + ' ',
-    error:  dye('bg-red', 'white')('[ ERROR ]') + ' ',
+    debug:  '[DEBUG]',
+    info:   '[INFO]',
+    log:    '[LOG]',
+    warn:   '[WARNING]',
+    error:  '[ERROR]',
+}
+
+const timestamps = {
+    ISO: () => '[' + new Date().toISOString() + ']',
+    Locale: () => '[' + new Date().toLocaleString() + ']',
+    Time: () => '[' + new Date().toISOString().slice(11, 19) + ']',
+    Date: () => '[' + new Date().toISOString().slice(0, 10) + ']',
+    default: () => '[' + new Date().toISOString().replace(/\.\d{3}z$/i, '').replace('T', ' ') + ']',
+    '': () => '',
 }
 
 export class ProstoLogger implements TConsoleInterface {
@@ -67,11 +77,15 @@ export class ProstoLogger implements TConsoleInterface {
         }
         const c = options?.console || console
 
-        this.debug = styles.debug.prefix(banner + banners.debug).attachConsole('debug', c),
-        this.info = styles.info.prefix(banner + banners.info).attachConsole('info', c),
-        this.log = styles.log.prefix(banner + banners.log).attachConsole('log', c),
-        this.warn = styles.warn.prefix(banner + banners.warn).attachConsole('warn', c),
-        this.error = styles.error.prefix(banner + banners.error).attachConsole('error', c),
+        const tsFunc = options?.timestamp || ''
+
+        const ts = timestamps[typeof tsFunc === 'string' ? tsFunc : 'default']
+
+        this.debug = styles.debug.prefix(() => banner + ts() + banners.debug + ' ').attachConsole('debug', c),
+        this.info = styles.info.prefix(() => banner + ts() + banners.info + ' ').attachConsole('info', c),
+        this.log = styles.log.prefix(() => banner + ts() + banners.log + ' ').attachConsole('log', c),
+        this.warn = styles.warn.prefix(() => banner + ts() + banners.warn + ' ').attachConsole('warn', c),
+        this.error = styles.error.prefix(() => banner + ts() + banners.error + ' ').attachConsole('error', c),
 
         this.debug.enable(this.logLevel >= EProstoLogLevel.DEBUG)
         this.info.enable(this.logLevel >= EProstoLogLevel.INFO)

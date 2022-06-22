@@ -10,6 +10,9 @@ const pkg = require(resolve(`package.json`))
 const packageOptions = pkg.buildOptions || {}
 const name = packageOptions.filename || path.basename(packageDir)
 
+const dyeModifiers = ['dim', 'bold', 'underscore', 'inverse', 'italic', 'crossed']
+const dyeColors = ['red', 'green', 'cyan', 'blue', 'yellow', 'white', 'magenta', 'black']
+
 // ensure TS checks only once for each build
 let hasTSChecked = false
 
@@ -199,6 +202,28 @@ function createDyeReplacePlugin() {
   })
 }
 
+
+function createDyeReplaceConst() {
+  const c = dye('red')
+  const bg = dye('bg-red')
+  const dyeReplacements = {
+    '__DYE_RESET__': '\'' + dye.reset + '\'',
+    '__DYE_COLOR_OFF__': '\'' + c.close + '\'',
+    '__DYE_BG_OFF__': '\'' + bg.close + '\'',
+  }
+  dyeModifiers.forEach(v => {
+    dyeReplacements[`__DYE_${ v.toUpperCase() }__`] = '\'' + dye(v).open + '\''
+    dyeReplacements[`__DYE_${ v.toUpperCase() }_OFF__`] = '\'' + dye(v).close + '\''
+  })
+  dyeColors.forEach(v => {
+    dyeReplacements[`__DYE_${ v.toUpperCase() }__`] = '\'' + dye(v).open + '\''
+    dyeReplacements[`__DYE_BG_${ v.toUpperCase() }__`] = '\'' + dye('bg-' + v).open + '\''
+    dyeReplacements[`__DYE_${ v.toUpperCase() }_BRIGHT__`] = '\'' + dye(v + '-bright').open + '\''
+    dyeReplacements[`__DYE_BG_${ v.toUpperCase() }_BRIGHT__`] = '\'' + dye('bg-' + v + '-bright').open + '\''
+  })
+  return dyeReplacements
+}
+
 function createReplacePlugin(
   isProduction,
   isBundlerESMBuild,
@@ -220,6 +245,7 @@ function createReplacePlugin(
     __BROWSER__: isBrowserBuild,
     __GLOBAL__: isGlobalBuild,
     __NODE_JS__: isNodeBuild,
+    ...createDyeReplaceConst(),
   }
   Object.keys(replacements).forEach(key => {
     if (key in process.env) {

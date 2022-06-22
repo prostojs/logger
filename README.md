@@ -24,8 +24,9 @@ const { dye } = require('@prostojs/dye')
 const { ProstoLogger, EProstoLogLevel }  = require('@prostojs/logger')
 
 const logger = new ProstoLogger({
-    banner: dye('green')('[Logger]'),
+    banner: '[My-Logger]',
     logLevel: EProstoLogLevel.DEBUG,
+    timestamp: true,
 })
 
 logger.debug('logger.debug')
@@ -44,7 +45,7 @@ const logger = new ProstoLogger({
 
     // banner that will be shown next to each message
     // *optional
-    banner: dye('green')('[Logger]'),
+    banner: '[My-Logger]',
 
     // maximum log level that will show message
     // *default EProstoLogLevel.LOG
@@ -55,6 +56,7 @@ const logger = new ProstoLogger({
     console: console,
 
     // styles for each message type
+    // dye stylist expected
     // *optional
     styles: {
         debug:  dye('yellow-bright', 'dim'),
@@ -65,6 +67,7 @@ const logger = new ProstoLogger({
     },
 
     // banners for each message type
+    // dye stylist expected
     // *optional
     typeBanners: {
         debug:  '[ DEBUG ]',
@@ -73,5 +76,10 @@ const logger = new ProstoLogger({
         warn:   dye('bg-yellow', 'red')('[WARNING]'),
         error:  dye('bg-red', 'white')('[ ERROR ]'),
     },
+
+    // timestamp (boolean | 'ISO' | 'Locale' | 'Time' | 'Date')
+    // to add timestamp to each log message
+    // *optional
+    timestamp: true
 })
 ```
