@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/prostojs/logger/compare/v0.2.0...v0.2.1) (2022-06-22)
+
+
+### Features
+
+* add timestamp ([54a75de](https://github.com/prostojs/logger/commit/54a75de817b4fb4d96f784351a46aa3961bb2253))
+
+
+
 # [0.2.0](https://github.com/prostojs/logger/compare/v0.1.0...v0.2.0) (2021-10-29)
 
 
