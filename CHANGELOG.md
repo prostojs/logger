@@ -1,3 +1,12 @@
+## [0.3.3](https://github.com/prostojs/logger/compare/v0.3.2...v0.3.3) (2023-04-11)
+
+
+### Bug Fixes
+
+* get messages fromparent ([ca45062](https://github.com/prostojs/logger/commit/ca45062fd6e27478d4364d67e9382e7183152d99))
+
+
+
 ## [0.3.2](https://github.com/prostojs/logger/compare/v0.3.1...v0.3.2) (2023-04-11)
 
 
