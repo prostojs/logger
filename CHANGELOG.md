@@ -1,3 +1,12 @@
+## [0.3.2](https://github.com/prostojs/logger/compare/v0.3.1...v0.3.2) (2023-04-11)
+
+
+### Features
+
+* add level to logger opts ([81f56d5](https://github.com/prostojs/logger/commit/81f56d52a1536f090f50a21467a10884ad1881ce))
+
+
+
 ## [0.3.1](https://github.com/prostojs/logger/compare/v0.3.0...v0.3.1) (2023-04-11)
 
 
