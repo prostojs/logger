@@ -39,7 +39,9 @@ describe('logger', () => {
     })
     it('must create child logger', () => {
         logger.clear()
-        logger.createTopic('new topic').log('new message')
+        const child = logger.createTopic('new topic', 2)
+        child.log('new message') // filtered by level 2
+        child.error('new error message')
         const msgs = logger.getMessages()
         expect(msgs).toHaveLength(1)
         expect(msgs[0].topic).toEqual('new topic')

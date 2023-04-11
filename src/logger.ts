@@ -19,6 +19,7 @@ export class ProstoLogger<T extends TObject = Record<string, never>> implements 
     }
 
     pushMessage(level: number, args: any[], topic = ''): void {
+        if (typeof this.options?.level === 'number' && level > this.options.level) return
         if (this.options?.parent) return this.options.parent.pushMessage(level, args, topic)
         const message: TProstoLoggerMessageBase = {
             topic,
@@ -84,9 +85,10 @@ export class ProstoLogger<T extends TObject = Record<string, never>> implements 
      * @param topic - string
      * @returns new ProstoLogger
      */
-    createTopic(topic: string) {
+    createTopic(topic: string, level?: number) {
         return new ProstoLogger<T>({
             ...(this.options || {}),
+            level,
             parent: this,
         }, topic)
     }
@@ -110,6 +112,7 @@ export class ProstoLogger<T extends TObject = Record<string, never>> implements 
 
 export interface TProstoLoggerOptions<T extends TObject = Record<string, never>> {
     persistLevel?: number | false
+    level?: number
     transports?: (TProstoLoggerTransport<T> | TProstoLoggerTransportFn<T>)[]
     mapper?: TProstoLoggerMapper<T>
     levels?: string[]
