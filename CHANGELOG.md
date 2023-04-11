@@ -1,3 +1,12 @@
+## [0.3.1](https://github.com/prostojs/logger/compare/v0.3.0...v0.3.1) (2023-04-11)
+
+
+### Features
+
+* add generic console interface ([177f574](https://github.com/prostojs/logger/commit/177f574040bff6a20708b6306dddec8f0eac3b56))
+
+
+
 # [0.3.0](https://github.com/prostojs/logger/compare/v0.2.1...v0.3.0) (2023-04-11)
 
 
