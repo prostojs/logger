@@ -5,7 +5,7 @@
 </a>
 </p>
 
-Plain simple logger with banner and colors based on `@prostojs/dye`
+Plain simple logger with banner and colors
 
 ## Install
 
@@ -20,66 +20,20 @@ Via CDN:
 ## Usage
 
 ```js
-const { dye } = require('@prostojs/dye')
-const { ProstoLogger, EProstoLogLevel }  = require('@prostojs/logger')
+const { ProstoLogger, createConsoleTransort, coloredConsole } = require('@prostojs/logger')
 
 const logger = new ProstoLogger({
-    banner: '[My-Logger]',
-    logLevel: EProstoLogLevel.DEBUG,
-    timestamp: true,
-})
+    transports: [createConsoleTransort({
+        // level: 0,
+        format: coloredConsole
+    })],
+}, 'LOGGER')
 
-logger.debug('logger.debug')
-logger.info('logger.info')
-logger.log('logger.log')
-logger.warn('logger.warn')
-logger.error('logger.error')
-```
-
-<img src="./docs/logger.png" style="max-width: 600px" />
-
-### Options
-
-```js
-const logger = new ProstoLogger({
-
-    // banner that will be shown next to each message
-    // *optional
-    banner: '[My-Logger]',
-
-    // maximum log level that will show message
-    // *default EProstoLogLevel.LOG
-    logLevel: EProstoLogLevel.DEBUG,
-
-    // console interface (usually `console` itself)
-    // *default console
-    console: console,
-
-    // styles for each message type
-    // dye stylist expected
-    // *optional
-    styles: {
-        debug:  dye('yellow-bright', 'dim'),
-        info:   dye('green', 'dim'),
-        log:    dye(),
-        warn:   dye('yellow'),
-        error:  dye('red', 'red-bright'),
-    },
-
-    // banners for each message type
-    // dye stylist expected
-    // *optional
-    typeBanners: {
-        debug:  '[ DEBUG ]',
-        info:   '[ INFO  ]',
-        log:    '[  LOG  ]',
-        warn:   dye('bg-yellow', 'red')('[WARNING]'),
-        error:  dye('bg-red', 'white')('[ ERROR ]'),
-    },
-
-    // timestamp (boolean | 'ISO' | 'Locale' | 'Time' | 'Date')
-    // to add timestamp to each log message
-    // *optional
-    timestamp: true
-})
+logger.error('Error Message', new Error('test error'))
+logger.fatal('Fatal here')
+logger.warn('Some warning', { object: true, array: [1,2,3] })
+logger.log('just a log message')
+logger.info('just an info message')
+logger.debug('just a debug message')
+logger.trace('trace message')
 ```

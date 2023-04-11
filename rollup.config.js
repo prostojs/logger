@@ -10,12 +10,12 @@ const pkg = require(resolve(`package.json`))
 const packageOptions = pkg.buildOptions || {}
 const name = packageOptions.filename || path.basename(packageDir)
 
-const dyeModifiers = ['dim', 'bold', 'underscore', 'inverse', 'italic', 'crossed']
-const dyeColors = ['red', 'green', 'cyan', 'blue', 'yellow', 'white', 'magenta', 'black']
-
 // ensure TS checks only once for each build
 let hasTSChecked = false
 
+
+const dyeModifiers = ['dim', 'bold', 'underscore', 'inverse', 'italic', 'crossed']
+const dyeColors = ['red', 'green', 'cyan', 'blue', 'yellow', 'white', 'magenta', 'black']
 const warning = dye('yellow').attachConsole()
 
 const outputConfigs = {
@@ -90,7 +90,6 @@ function createConfig(format, output, plugins = []) {
   output.sourcemap = !!process.env.SOURCE_MAP
   output.externalLiveBindings = false
   output.globals = {
-    '@prostojs/dye': 'ProstoDye'
   }
 
   if (isGlobalBuild) {
@@ -171,7 +170,7 @@ function createConfig(format, output, plugins = []) {
         isGlobalBuild,
         isNodeBuild
       ),
-      createDyeReplacePlugin(),
+      createDyeReplaceStringPlugin(),
       ...nodePlugins,
       ...plugins
     ],
@@ -187,13 +186,23 @@ function createConfig(format, output, plugins = []) {
   }
 }
 
-function createDyeReplacePlugin() {
+function createDyeReplaceStringPlugin() {
+  const c = dye('red')
+  const bg = dye('bg-red')
   const dyeReplacements = {
     'dye.reset': dye.reset,
+    'dye-off.color': c.close,
+    'dye-off.bg': bg.close,
   }
-  ;['dim', 'bold', 'red', 'green', 'cyan', 'blue'].forEach(v => {
+  dyeModifiers.forEach(v => {
     dyeReplacements[`dye.${ v }`] = dye(v).open
     dyeReplacements[`dye-off.${ v }`] = dye(v).close
+  })
+  dyeColors.forEach(v => {
+    dyeReplacements[`dye.${ v }`] = dye(v).open
+    dyeReplacements[`dye.bg-${ v }`] = dye('bg-' + v).open
+    dyeReplacements[`dye.${ v }-bright`] = dye(v + '-bright').open
+    dyeReplacements[`dye.bg-${ v }-bright`] = dye('bg-' + v + '-bright').open
   })  
   return replace({
     values: dyeReplacements,
@@ -201,7 +210,6 @@ function createDyeReplacePlugin() {
     preventAssignment: false
   })
 }
-
 
 function createDyeReplaceConst() {
   const c = dye('red')
