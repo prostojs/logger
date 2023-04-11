@@ -97,7 +97,8 @@ export class ProstoLogger<T extends TObject = Record<string, never>> implements 
      * Returns the persisted in memory log messages
      * (if options.persistLevel was set)
      */
-    getMessages() {
+    getMessages(): TProstoLoggerMessage<T>[] {
+        if (this.options?.parent) return this.options.parent.getMessages()
         return this.messages
     }
 

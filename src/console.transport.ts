@@ -6,7 +6,7 @@ import { TObject } from './types'
  * @param opts - object with level and format
  * @returns TProstoLoggerTransportFn
  */
-export function createConsoleTransort<T extends TObject = Record<string, never>>(opts: {
+export function createConsoleTransort<T extends TObject = any>(opts?: {
     level?: number
     format?: (m: TProstoLoggerMessage<T>) => unknown
 }): TProstoLoggerTransportFn<T> {
