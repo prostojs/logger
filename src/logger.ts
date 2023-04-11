@@ -1,6 +1,7 @@
+import { TConsoleBase } from './base.types'
 import { TObject } from './types'
 
-export class ProstoLogger<T extends TObject = Record<string, never>> {
+export class ProstoLogger<T extends TObject = Record<string, never>> implements TConsoleBase {
     protected messages: TProstoLoggerMessage<T>[] = []
 
     protected levels: string[]
@@ -17,7 +18,8 @@ export class ProstoLogger<T extends TObject = Record<string, never>> {
         }
     }
 
-    pushMessage(level: number, args: any[], topic = '') {
+    pushMessage(level: number, args: any[], topic = ''): void {
+        if (this.options?.parent) return this.options.parent.pushMessage(level, args, topic)
         const message: TProstoLoggerMessageBase = {
             topic,
             level,
@@ -76,10 +78,31 @@ export class ProstoLogger<T extends TObject = Record<string, never>> {
         this.pushMessage(this.mappedLevels.get('trace') || 6, args, this.topic)
     }
 
+    /**
+     * Creates a child logger with a new topic
+     * Child logger pushes the messages through the parent logger
+     * @param topic - string
+     * @returns new ProstoLogger
+     */
+    createTopic(topic: string) {
+        return new ProstoLogger<T>({
+            ...(this.options || {}),
+            parent: this,
+        }, topic)
+    }
+
+    /**
+     * Returns the persisted in memory log messages
+     * (if options.persistLevel was set)
+     */
     getMessages() {
         return this.messages
     }
 
+    /**
+     * Clears the persisted in memory log messages
+     * (if options.persistLevel was set)
+     */
     clear() {
         this.messages = []
     }
@@ -90,6 +113,7 @@ export interface TProstoLoggerOptions<T extends TObject = Record<string, never>>
     transports?: (TProstoLoggerTransport<T> | TProstoLoggerTransportFn<T>)[]
     mapper?: TProstoLoggerMapper<T>
     levels?: string[]
+    parent?: ProstoLogger<T>
 }
 
 export interface TProstoLoggerMessageBase {

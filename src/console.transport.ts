@@ -1,6 +1,11 @@
 import { TProstoLoggerMessage, TProstoLoggerTransportFn } from './logger'
 import { TObject } from './types'
 
+/**
+ * Factory for a Console Transport for ProstoLogger
+ * @param opts - object with level and format
+ * @returns TProstoLoggerTransportFn
+ */
 export function createConsoleTransort<T extends TObject = Record<string, never>>(opts: {
     level?: number
     format?: (m: TProstoLoggerMessage<T>) => unknown
@@ -29,6 +34,12 @@ export function createConsoleTransort<T extends TObject = Record<string, never>>
     }
 }
 
+/**
+ * Formatter for Console Transport that provides
+ * nice colored console messages
+ * @param m 
+ * @returns 
+ */
 export const coloredConsole: ((m: TProstoLoggerMessage) => string) = (m) => {
     let color = ''
     switch (m.level) {
