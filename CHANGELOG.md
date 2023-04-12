@@ -1,3 +1,12 @@
+## [0.3.4](https://github.com/prostojs/logger/compare/v0.3.3...v0.3.4) (2023-04-12)
+
+
+### Features
+
+* add stripColors console formatter ([106c40a](https://github.com/prostojs/logger/commit/106c40a1c7e98661f2214648f46e10d3bb79b149))
+
+
+
 ## [0.3.3](https://github.com/prostojs/logger/compare/v0.3.2...v0.3.3) (2023-04-11)
 
 

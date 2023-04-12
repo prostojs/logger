@@ -1,6 +1,6 @@
 {
   "name": "@prostojs/logger",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Plain simple logger with banner and colors",
   "main": "index.js",
   "module": "dist/logger.esm-bundler.js",
