@@ -10,6 +10,7 @@ import { TObject } from './types'
 export function createConsoleTransort<T extends TObject = any>(opts?: {
     level?: number
     format?: (m: TProstoLoggerMessageBase) => unknown
+    trace?: boolean
 }): TProstoLoggerTransportFn<T> {
     return (message) => {
         if (typeof opts?.level === 'undefined' || message.level <= opts?.level) {
@@ -27,7 +28,12 @@ export function createConsoleTransort<T extends TObject = any>(opts?: {
                 case 5:
                     console.debug(formatted); break
                 case 6:
-                    console.trace(formatted); break
+                    if (opts?.trace) {
+                        console.trace(formatted)
+                    } else {
+                        console.debug(formatted)
+                    }
+                    break
                 default:
                     console.log(formatted)
             }
