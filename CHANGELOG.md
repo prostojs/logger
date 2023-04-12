@@ -1,3 +1,12 @@
+## [0.3.5](https://github.com/prostojs/logger/compare/v0.3.4...v0.3.5) (2023-04-12)
+
+
+### Features
+
+* add optional trace to console transport ([a78a40c](https://github.com/prostojs/logger/commit/a78a40c16320af588c273e986c5f1de6c7c8b205))
+
+
+
 ## [0.3.4](https://github.com/prostojs/logger/compare/v0.3.3...v0.3.4) (2023-04-12)
 
 
