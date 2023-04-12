@@ -94,6 +94,14 @@ export class ProstoLogger<T extends TObject = Record<string, never>> implements 
     }
 
     /**
+    * Returns options passed to constructor
+    * @returns 
+    */
+    getOptions() {
+        return { ...(this.options || {}) } 
+    }
+
+    /**
      * Returns the persisted in memory log messages
      * (if options.persistLevel was set)
      */

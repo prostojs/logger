@@ -1,14 +1,15 @@
-import { TProstoLoggerMessage, TProstoLoggerTransportFn } from './logger'
+import { TProstoLoggerMessageBase, TProstoLoggerTransportFn } from './logger'
 import { TObject } from './types'
 
 /**
+ * [Log-Transport]
  * Factory for a Console Transport for ProstoLogger
  * @param opts - object with level and format
  * @returns TProstoLoggerTransportFn
  */
 export function createConsoleTransort<T extends TObject = any>(opts?: {
     level?: number
-    format?: (m: TProstoLoggerMessage<T>) => unknown
+    format?: (m: TProstoLoggerMessageBase) => unknown
 }): TProstoLoggerTransportFn<T> {
     return (message) => {
         if (typeof opts?.level === 'undefined' || message.level <= opts?.level) {
@@ -35,12 +36,13 @@ export function createConsoleTransort<T extends TObject = any>(opts?: {
 }
 
 /**
+ * [Console-Transport-Formatter]
  * Formatter for Console Transport that provides
  * nice colored console messages
  * @param m 
  * @returns 
  */
-export const coloredConsole: ((m: TProstoLoggerMessage) => string) = (m) => {
+export const coloredConsole: ((m: TProstoLoggerMessageBase) => string) = (m) => {
     let color = ''
     switch (m.level) {
         case 0:
@@ -62,6 +64,19 @@ export const coloredConsole: ((m: TProstoLoggerMessage) => string) = (m) => {
     const time = m.timestamp.toISOString().replace('T', ' ').replace(/\.\d{3}z$/i, '')
     const stack = m.stack ? `\n${ __DYE_DIM__ + __DYE_WHITE__ }${ m.stack.join('\n') }` : ''
     return `${color}${topic}${type}[${time}] ${m.messages.join('\n')}${stack}${__DYE_RESET__}`
+}
+
+/**
+ * [Console-Transport-Formatter]
+ * Removes any color modifiers from messages
+ * @param m 
+ * @returns log message structure (object)
+ */
+export const stripColors: ((m: TProstoLoggerMessageBase) => TProstoLoggerMessageBase) = (m) => {
+    for (let i = 0; i < m.messages.length; i++) {
+        m.messages[i] = m.messages[i].replace(/\x1b\[[^m]+m/g, '')
+    }
+    return m
 }
 
 const skipTypes = ['log', 'info', 'warn', 'error']
