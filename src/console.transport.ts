@@ -1,4 +1,4 @@
-import { TProstoLoggerMessageBase, TProstoLoggerTransportFn } from './logger'
+import { TProstoLoggerMessage, TProstoLoggerMessageBase, TProstoLoggerTransportFn } from './logger'
 import { TObject } from './types'
 
 /**
@@ -9,7 +9,7 @@ import { TObject } from './types'
  */
 export function createConsoleTransort<T extends TObject = any>(opts?: {
     level?: number
-    format?: (m: TProstoLoggerMessageBase) => unknown
+    format?: (m: TProstoLoggerMessage<T>) => unknown
     trace?: boolean
 }): TProstoLoggerTransportFn<T> {
     return (message) => {
