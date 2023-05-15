@@ -1,3 +1,12 @@
+## [0.3.6](https://github.com/prostojs/logger/compare/v0.3.5...v0.3.6) (2023-05-15)
+
+
+### Bug Fixes
+
+* proper type for createConsoleTransort format option ([fffda4e](https://github.com/prostojs/logger/commit/fffda4e8b4576d0b683464b9675b9f527df8e07e))
+
+
+
 ## [0.3.5](https://github.com/prostojs/logger/compare/v0.3.4...v0.3.5) (2023-04-12)
 
 
