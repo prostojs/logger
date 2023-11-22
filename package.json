@@ -10,8 +10,8 @@
     "dist"
   ],
   "exports": {
+    "./package.json": "./package.json",
     ".": {
-      "./package.json": "./package.json",
       "require": "./dist/logger.cjs.prod.js",
       "import": "./dist/logger.esm-bundler.js",
       "types": "./dist/logger.d.ts"
