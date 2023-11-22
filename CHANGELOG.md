@@ -1,3 +1,13 @@
+## [0.3.7](https://github.com/prostojs/logger/compare/v0.3.6...v0.3.7) (2023-11-22)
+
+
+### Bug Fixes
+
+* pass proper log level when createTopic ([db469ed](https://github.com/prostojs/logger/commit/db469ed404f512fcfa194cdb173a5ed5b7fb058f))
+* update test case ([94254aa](https://github.com/prostojs/logger/commit/94254aaadba08292686e8aee4af471842490668f))
+
+
+
 ## [0.3.6](https://github.com/prostojs/logger/compare/v0.3.5...v0.3.6) (2023-05-15)
 
 
