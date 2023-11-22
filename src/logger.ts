@@ -88,7 +88,7 @@ export class ProstoLogger<T extends TObject = Record<string, never>> implements 
     createTopic(topic: string, level?: number) {
         return new ProstoLogger<T>({
             ...(this.options || {}),
-            level,
+            level: (this.options || { level }).level,
             parent: this,
         }, topic)
     }
