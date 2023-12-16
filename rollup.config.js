@@ -1,7 +1,8 @@
-import path from 'path'
-import ts from 'rollup-plugin-typescript2'
-import replace from '@rollup/plugin-replace'
-import { dye } from '@prostojs/dye'
+const path = require('path')
+const ts = require('rollup-plugin-typescript2')
+const replace = require('@rollup/plugin-replace')
+const { dye } = require('@prostojs/dye')
+const { dts } = require('rollup-plugin-dts')
 
 const masterVersion = require('./package.json').version
 const packageDir = path.resolve('./')
@@ -20,7 +21,7 @@ const warning = dye('yellow').attachConsole()
 
 const outputConfigs = {
   'esm-bundler': {
-    file: resolve(`dist/${name}.esm-bundler.js`),
+    file: resolve(`dist/${name}.esm-bundler.mjs`),
     format: `es`
   },
   'esm-browser': {
@@ -65,13 +66,20 @@ if (process.env.NODE_ENV === 'production') {
     if (format === 'cjs') {
       packageConfigs.push(createProductionConfig(format))
     }
-    if (/^(global|esm-browser)(-runtime)?/.test(format)) {
-      packageConfigs.push(createMinifiedConfig(format))
-    }
   })
 }
 
-export default packageConfigs
+const configs = [...packageConfigs, {
+  plugins: [dts()],
+  input: 'src/index.ts',
+  output: {
+    file: resolve(`dist/${name}.d.ts`),
+    format: 'es',
+    external: packageConfigs[0].external
+  },
+}]
+
+module.exports = configs
 
 function createConfig(format, output, plugins = []) {
   if (!output) {
@@ -96,8 +104,7 @@ function createConfig(format, output, plugins = []) {
     output.name = packageOptions.name
   }
 
-  const shouldEmitDeclarations =
-    pkg.types && process.env.TYPES != null && !hasTSChecked
+  const shouldEmitDeclarations = false
 
   const tsPlugin = ts({
     check: process.env.NODE_ENV === 'production' && !hasTSChecked,
@@ -271,25 +278,4 @@ function createProductionConfig(format) {
     file: resolve(`dist/${name}.${format}.prod.js`),
     format: outputConfigs[format].format
   })
-}
-
-function createMinifiedConfig(format) {
-  const { terser } = require('rollup-plugin-terser')
-  return createConfig(
-    format,
-    {
-      file: outputConfigs[format].file.replace(/\.js$/, '.prod.js'),
-      format: outputConfigs[format].format
-    },
-    [
-      terser({
-        module: /^esm/.test(format),
-        compress: {
-          ecma: 2015,
-          pure_getters: true
-        },
-        safari10: true
-      })
-    ]
-  )
 }
