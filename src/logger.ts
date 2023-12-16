@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TConsoleBase } from './base.types'
 import { TObject } from './types'
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TProstoLoggerMessage, TProstoLoggerMessageBase, TProstoLoggerTransportFn } from './logger'
 import { TObject } from './types'
 
