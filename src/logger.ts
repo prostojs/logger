@@ -28,7 +28,7 @@ export class ProstoLogger<T extends TObject = Record<string, never>> implements 
             type: this.levels[level] || '',
             messages: args
                 .filter(a => (!(a instanceof Error) && !(a as Error).stack))
-                .map(a => textTypes.includes((typeof a)) ? String(a) : a instanceof Error ? `[Error]: ${ a.message }` : safeStringify(a)),
+                .map(a => textTypes.includes((typeof a)) ? String(a) : a instanceof Error ? `[Error]: ${ a.message }` : a as string),
             timestamp: new Date(),
         }
         for (const a of args) {
@@ -133,7 +133,8 @@ export interface TProstoLoggerMessageBase {
     topic?: string
     level: number
     type: string
-    messages: string[]
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+    messages: (string | any)[]
     timestamp: Date
     stack?: string[]
 }
@@ -162,18 +163,3 @@ const defaultLevels = [
 
 const defaultMappedLevels = new Map<string, number>()
 defaultLevels.forEach((type, level) => defaultMappedLevels.set(type, level))
-
-function safeStringify(obj: unknown) {
-    const objType = getObjType(obj as TObject)
-    try {
-        return objType + ' ' + JSON.stringify(obj)
-    } catch (e) {
-        return `[${ typeof obj } ${ objType }] (failed to stringify)`
-    }
-}
-
-function getObjType(obj: TObject): string {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
-    return typeof obj === 'object' ? Object.getPrototypeOf(obj)?.constructor?.name as string : ''
-}
-

@@ -70,20 +70,38 @@ export const coloredConsole: ((m: TProstoLoggerMessageBase) => string) = (m) => 
     const type = (m.type && !skipTypes.includes(m.type)) ? `[${ m.type.padEnd(5).toUpperCase() }]` : ''
     const time = m.timestamp.toISOString().replace('T', ' ').replace(/\.\d{3}z$/i, '')
     const stack = m.stack ? `\n${ __DYE_DIM__ + __DYE_WHITE__ }${ m.stack.join('\n') }` : ''
-    return `${color}${topic}${type}[${time}] ${m.messages.join('\n')}${stack}${__DYE_RESET__}`
+    const lines = m.messages.map(mes => typeof mes !== 'string' ? safeStringify(m) : m)
+    return `${color}${topic}${type}[${time}] ${lines.join('\n') }${stack}${__DYE_RESET__}`
 }
 
 /**
  * [Console-Transport-Formatter]
  * Removes any color modifiers from messages
- * @param m 
+ * @param m
  * @returns log message structure (object)
  */
 export const stripColors: ((m: TProstoLoggerMessageBase) => TProstoLoggerMessageBase) = (m) => {
     for (let i = 0; i < m.messages.length; i++) {
-        m.messages[i] = m.messages[i].replace(/\x1b\[[^m]+m/g, '')
+        const message = m.messages[i]
+        if (typeof message === 'string') {
+            m.messages[i] = message.replace(/\x1b\[[^m]+m/g, '')
+        }
     }
     return m
 }
 
 const skipTypes = ['log', 'info', 'warn', 'error']
+
+function safeStringify(obj: unknown) {
+    const objType = getObjType(obj as TObject)
+    try {
+        return objType + ' ' + JSON.stringify(obj)
+    } catch (e) {
+        return `[${typeof obj} ${objType}] (failed to stringify)`
+    }
+}
+
+function getObjType(obj: TObject): string {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
+    return typeof obj === 'object' ? Object.getPrototypeOf(obj)?.constructor?.name as string : ''
+}
