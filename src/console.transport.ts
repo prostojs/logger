@@ -82,7 +82,7 @@ export const coloredConsole: ((m: TProstoLoggerMessageBase) => string) = (m) => 
  */
 export const stripColors: ((m: TProstoLoggerMessageBase) => TProstoLoggerMessageBase) = (m) => {
     for (let i = 0; i < m.messages.length; i++) {
-        const message = m.messages[i]
+        const message = m.messages[i] as string
         if (typeof message === 'string') {
             m.messages[i] = message.replace(/\x1b\[[^m]+m/g, '')
         }
