@@ -1,3 +1,12 @@
+## [0.4.2](https://github.com/prostojs/logger/compare/v0.4.1...v0.4.2) (2023-12-21)
+
+
+### Bug Fixes
+
+* fix coloredConsole stringfy ([931b8cf](https://github.com/prostojs/logger/commit/931b8cfbfa74d00d63ecbad1432afb1d6d1846b5))
+
+
+
 ## [0.4.1](https://github.com/prostojs/logger/compare/v0.4.0...v0.4.1) (2023-12-21)
 
 
