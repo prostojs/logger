@@ -70,7 +70,7 @@ export const coloredConsole: ((m: TProstoLoggerMessageBase) => string) = (m) => 
     const type = (m.type && !skipTypes.includes(m.type)) ? `[${ m.type.padEnd(5).toUpperCase() }]` : ''
     const time = m.timestamp.toISOString().replace('T', ' ').replace(/\.\d{3}z$/i, '')
     const stack = m.stack ? `\n${ __DYE_DIM__ + __DYE_WHITE__ }${ m.stack.join('\n') }` : ''
-    const lines = m.messages.map(mes => typeof mes !== 'string' ? safeStringify(m) : m)
+    const lines = m.messages.map(mes => typeof mes !== 'string' ? safeStringify(mes) : mes)
     return `${color}${topic}${type}[${time}] ${lines.join('\n') }${stack}${__DYE_RESET__}`
 }
 
