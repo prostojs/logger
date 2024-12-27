@@ -1,3 +1,7 @@
+## [0.4.3](https://github.com/prostojs/logger/compare/v0.4.2...v0.4.3) (2024-12-27)
+
+
+
 ## [0.4.2](https://github.com/prostojs/logger/compare/v0.4.1...v0.4.2) (2023-12-21)
 
 
