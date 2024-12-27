@@ -103,8 +103,6 @@ export const stripColors: ((m: TProstoLoggerMessageBase) => TProstoLoggerMessage
     return m
 }
 
-const skipTypes = ['log', 'info', 'warn', 'error']
-
 function safeStringify(obj: unknown) {
     const objType = getObjType(obj as TObject)
     try {
