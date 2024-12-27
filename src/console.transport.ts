@@ -42,6 +42,14 @@ export function createConsoleTransort<T extends TObject = any>(opts?: {
     }
 }
 
+const logLevelIcons = {
+    debug: '⟫ ',
+    info: '› ',
+    log: '› ',
+    warn: '‼ ',
+    error: '■ ',
+}
+
 /**
  * [Console-Transport-Formatter]
  * Formatter for Console Transport that provides
@@ -66,12 +74,17 @@ export const coloredConsole: ((m: TProstoLoggerMessageBase) => string) = (m) => 
         case 6:
             color = __DYE_CYAN__ + __DYE_DIM__; break
     }
-    const topic = m.topic ? `[${ m.topic }]` : ''
-    const type = (m.type && !skipTypes.includes(m.type)) ? `[${ m.type.padEnd(5).toUpperCase() }]` : ''
-    const time = m.timestamp.toISOString().replace('T', ' ').replace(/\.\d{3}z$/i, '')
+    const topic = m.topic ? `${__DYE_BOLD__ + __DYE_CYAN_BRIGHT__}${ m.topic }${__DYE_RESET__} ` : ''
+    const type = m.type && (logLevelIcons[m.type as 'log'] || `[${ m.type.padEnd(5).toUpperCase() }] `) || ''
+    const time = `${__DYE_WHITE__ + __DYE_DIM__}${m.timestamp
+        .toISOString()
+        .replace('T', ' ')
+        .replace(/\.\d{3}z$/i, '')}${__DYE_DIM_OFF__}`
     const stack = m.stack ? `\n${ __DYE_DIM__ + __DYE_WHITE__ }${ m.stack.join('\n') }` : ''
     const lines = m.messages.map(mes => typeof mes !== 'string' ? safeStringify(mes) : mes)
-    return `${color}${topic}${type}[${time}] ${lines.join('\n') }${stack}${__DYE_RESET__}`
+    return `${time} ${topic}${color}${type}${lines.join(
+        '\n',
+    )}${stack}${__DYE_RESET__}`
 }
 
 /**
