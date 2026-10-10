@@ -51,7 +51,7 @@
   },
   "homepage": "https://github.com/prostojs/logger#readme",
   "devDependencies": {
-    "@prostojs/dye": "^0.3.0",
+    "@prostojs/dye": "^0.5.0",
     "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-node-resolve": "^15.3.1",
     "@rollup/plugin-replace": "^5.0.7",
