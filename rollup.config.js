@@ -110,6 +110,8 @@ function createConfig(format, output, plugins = []) {
     check: process.env.NODE_ENV === 'production' && !hasTSChecked,
     tsconfig: path.resolve(__dirname, 'tsconfig.json'),
     cacheRoot: path.resolve(__dirname, 'node_modules/.rts2_cache'),
+    // rpt2's default include `*.ts+(|x)` no longer matches under picomatch >= 2.3.2
+    include: ['*.ts', '**/*.ts'],
     tsconfigOverride: {
       compilerOptions: {
         sourceMap: output.sourcemap,
